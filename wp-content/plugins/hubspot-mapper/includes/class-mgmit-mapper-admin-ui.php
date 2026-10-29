@@ -12,6 +12,7 @@ class MGMIT_Mapper_Admin_UI {
         add_action('wp_ajax_mgmit_mapper_delete_mapping', array($this, 'ajax_delete_mapping'));
         add_action('wp_ajax_mgmit_mapper_duplicate_mapping', array($this, 'ajax_duplicate_mapping'));
         add_action('wp_ajax_mgmit_mapper_get_options', array($this, 'ajax_get_options'));
+        add_action('wp_ajax_mgmit_mapper_get_source_options', array($this, 'ajax_get_source_options'));
         add_action('wp_ajax_mgmit_mapper_save_credentials', array($this, 'ajax_save_credentials'));
     }
 
@@ -640,6 +641,43 @@ class MGMIT_Mapper_Admin_UI {
         }
 
         wp_send_json_success(array('options' => $options));
+    }
+
+    /**
+     * Devuelve las opciones del campo del formulario de origen (hoy: campos de Ultimate Membership)
+     * para elegir el "texto del formulario" en un desplegable. Lista vacía si no se conocen.
+     */
+    public function ajax_get_source_options() {
+        check_ajax_referer('mgmit-mapper-options', 'security');
+
+        if (!current_user_can('manage_options')) {
+            wp_send_json_error('Permisos insuficientes.');
+        }
+
+        $name    = isset($_POST['wp_field']) ? sanitize_text_field(wp_unslash($_POST['wp_field'])) : '';
+        $options = array();
+
+        $fields = get_option('ihc_user_fields');
+        if ($name !== '' && is_array($fields)) {
+            foreach ($fields as $f) {
+                if (!is_array($f) || !isset($f['name']) || strcasecmp($f['name'], $name) !== 0) {
+                    continue;
+                }
+                $values = isset($f['values']) ? $f['values'] : array();
+                if (is_string($values)) {
+                    $values = preg_split('/\r\n|\r|\n|,/', $values);
+                }
+                foreach ((array) $values as $v) {
+                    $v = trim(wp_strip_all_tags((string) $v));
+                    if ($v !== '') {
+                        $options[] = $v;
+                    }
+                }
+                break;
+            }
+        }
+
+        wp_send_json_success(array('options' => array_values(array_unique($options))));
     }
 
     public function ajax_delete_mapping() {

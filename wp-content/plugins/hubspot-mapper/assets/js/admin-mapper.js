@@ -158,9 +158,28 @@
         return $sel;
     }
 
+    // Desplegable con las opciones del campo del formulario; si no se conocen, campo de texto.
+    function fromControl(srcOptions, selected) {
+        if (!srcOptions || !srcOptions.length) {
+            return $('<input type="text" class="mgmit-vm-from widefat" placeholder="Texto tal como aparece en el formulario">').val(selected || '');
+        }
+        var $sel = $('<select class="mgmit-vm-from widefat"></select>');
+        $sel.append($('<option value="">— Selecciona opción del formulario —</option>'));
+        var found = false;
+        srcOptions.forEach(function (v) {
+            var $o = $('<option></option>').val(v).text(v);
+            if (v === selected) { $o.prop('selected', true); found = true; }
+            $sel.append($o);
+        });
+        if (selected && !found) {
+            $sel.append($('<option></option>').val(selected).text(selected + ' (no está en el formulario)').prop('selected', true));
+        }
+        return $sel;
+    }
+
     function addPairRow($panel, options, from, to) {
         var $tr = $('<tr class="mgmit-vm-pair"></tr>');
-        $tr.append($('<td></td>').append($('<input type="text" class="mgmit-vm-from widefat" placeholder="Texto tal como aparece en el formulario">').val(from || '')));
+        $tr.append($('<td></td>').append(fromControl($panel.data('srcOptions'), from || '')));
         $tr.append($('<td></td>').append(optionSelect(options, to || '')));
         $tr.append($('<td style="text-align:center;"><button type="button" class="button button-small mgmit-vm-remove" style="color:#b32d2e;border-color:#b32d2e;">&#10005;</button></td>'));
         $panel.find('.mgmit-vm-body').append($tr);
@@ -187,6 +206,16 @@
         .fail(function () { cb(MGMIT_Admin.strings.error); });
     }
 
+    function loadSourceOptions(wpField, cb) {
+        $.post(MGMIT_Admin.ajaxurl, {
+            action:   'mgmit_mapper_get_source_options',
+            security: MGMIT_Admin.nonce_options,
+            wp_field: wpField,
+        })
+        .done(function (res) { cb(res && res.success ? res.data.options : []); })
+        .fail(function () { cb([]); });
+    }
+
     function buildPanel($row, prop) {
         var pairs = getRowPairs($row);
         $row.next('.mgmit-vm-row').remove();
@@ -206,16 +235,20 @@
         var $msg = $panel.find('.mgmit-vm-msg').text('Cargando opciones de HubSpot…');
         $panel.find('.mgmit-vm-add').prop('disabled', true);
 
+        var wpField = $row.find('.mgmit-wp-field').val().trim();
+        loadSourceOptions(wpField, function (srcOptions) {
         loadOptions(prop, function (err, options) {
             if (err) {
                 $msg.css('color', '#b32d2e').text(err);
                 return;
             }
+            $panel.data('srcOptions', srcOptions);
             $panel.data('options', options);
-            $msg.text('Escribe el texto del formulario y elige el valor de HubSpot al que corresponde. Lo que no esté aquí se intenta emparejar automáticamente (ignorando acentos y mayúsculas).');
+            $msg.text('Elige la opción del formulario (o escribe su texto) y el valor de HubSpot al que corresponde. Lo que no esté aquí se intenta emparejar automáticamente (ignorando acentos y mayúsculas).');
             if (!pairs.length) { pairs.push({ from: '', to: '' }); }
             pairs.forEach(function (p) { addPairRow($panel, options, p.from, p.to); });
             $panel.find('.mgmit-vm-add').prop('disabled', false);
+        });
         });
     }
 

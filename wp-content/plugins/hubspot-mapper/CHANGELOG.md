@@ -1,5 +1,17 @@
 # Changelog — HubSpot Mapper
 
+## [2.8.1] — 2026-10-29
+
+### Cambiado
+- **Equivalencias de valores:** la columna "Texto del formulario" ahora es un desplegable con las opciones del campo (igual que la de HubSpot) en lugar de un campo de texto libre. Las opciones se leen de la configuración del campo en Ultimate Membership (`ihc_user_fields`, nombre del campo = columna "Campo del formulario"). Si el campo no se encuentra o no tiene opciones, se mantiene el campo de texto. Un texto ya guardado que no esté entre las opciones se conserva y se marca "(no está en el formulario)".
+- Nuevo endpoint AJAX `mgmit_mapper_get_source_options`.
+
+## [2.8.0] — 2026-10-28
+
+### Añadido
+- **Adaptador "Ultimate Membership — Perfil / pasos obligatorios (modal)"** (`ihc_action_update_user`, prioridad 10): permite mapear formularios que se guardan con el flujo de actualización de perfil de UMP, como la modal de `ump-required-steps`. Solo se dispara cuando UMP ha validado y guardado el formulario. Prioridad 10 a propósito: la modal engancha el mismo hook en prioridad 20 y hace redirect+exit al completar el paso.
+- `MGMIT_Mapper_Adapters::resolve_ultimate_membership_profile()`: lee los campos de `$_POST` pero toma el email del **usuario de la sesión**, no del formulario, para que un valor manipulado en el navegador no pueda escribir datos en el contacto de otro email.
+
 ## [2.7.0] — 2026-10-27
 
 ### Añadido

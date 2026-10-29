@@ -107,6 +107,17 @@ class MGMIT_Mapper_Adapters {
                 'args'     => 5,
                 'resolver' => array('MGMIT_Mapper_Adapters', 'resolve_ultimate_membership'),
             ),
+            'ultimate_membership_profile' => array(
+                'label'    => 'Ultimate Membership — Perfil / pasos obligatorios (modal)',
+                // Se dispara solo si UMP ha validado y guardado el formulario de perfil.
+                // Prioridad baja a propósito: el plugin ump-required-steps engancha este
+                // mismo hook en prioridad 20 y hace wp_safe_redirect()+exit al completar
+                // el paso, lo que cortaría los callbacks posteriores.
+                'hook'     => 'ihc_action_update_user',
+                'priority' => 10,
+                'args'     => 1,
+                'resolver' => array('MGMIT_Mapper_Adapters', 'resolve_ultimate_membership_profile'),
+            ),
         );
 
         return apply_filters('mgmit_mapper_adapters', $defaults);
@@ -386,6 +397,26 @@ class MGMIT_Mapper_Adapters {
             if ($user) {
                 $data['user_email'] = $user->user_email;
             }
+        }
+        return $data;
+    }
+
+    /**
+     * Ultimate Membership, actualización de perfil: ihc_action_update_user($uid).
+     * Los campos enviados se leen de $_POST. El email NO se toma del formulario: se
+     * sustituye por el del usuario de la sesión para que un valor manipulado en el
+     * navegador no pueda escribir datos en el contacto de otro email.
+     *
+     * @param array $hook_args
+     * @return array
+     */
+    public static function resolve_ultimate_membership_profile($hook_args) {
+        $data = self::post_data();
+
+        $uid  = isset($hook_args[0]) ? (int) $hook_args[0] : 0;
+        $user = $uid > 0 ? get_userdata($uid) : false;
+        if ($user && $user->user_email !== '') {
+            $data['user_email'] = $user->user_email;
         }
         return $data;
     }
