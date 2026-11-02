@@ -1,0 +1,766 @@
+/*
+Theme Name: Divi Enfant
+Description: Theme enfant de Divi. Vous pouvez maintenant effectuer vos modifications en toute sécurité.
+Author: MSM Web Solutions
+Author URI: https://www.msm-web-solutions.com/
+Template: Divi
+Version: 1.0
+*/
+
+/*landing indections-recurrentes */
+
+.page-id-26203 .xoo-wsc-basket,
+.page-id-26203  .et_pb_button_module_wrapper.et_pb_button_0_wrapper.et_pb_module {
+	display: none;
+}
+
+#form .iump-register-form #createuser .iump-form-line-register{
+	width:25%;
+}
+
+#form .iump-register-form #createuser .iump-form-line-register.iump-form-exclusive,
+.iump-register-form #createuser .iump-form-line-register.iump-form-rgpd{
+	width: 33% !important;
+	font-size: 12px;
+}
+#form .iump-register-form #createuser .iump-form-line-register.iump-form-recaptcha,
+#form .iump-form-line-register.iump-form-recaptcha .g-recaptcha-wrapper {
+	padding:0px;
+	margin:0px;
+	width: 33% !important;
+}
+#form .iump-submit-form{
+	margin-top:25px;	
+}
+#form .ihc-register-14 .iump-submit-form input{
+	background:#EF7D00 !important;
+}
+#form .break-line-newbies{
+	width:100%;
+	display:block;
+}
+
+@media only screen and (max-width: 820px) {
+	#form .iump-register-form #createuser .iump-form-line-register.iump-form-exclusive,
+	.iump-register-form #createuser .iump-form-line-register.iump-form-rgpd,
+	#form .iump-register-form #createuser .iump-form-line-register.iump-form-recaptcha,
+	#form .iump-form-line-register.iump-form-recaptcha .g-recaptcha-wrapper{ width: 100% !important}
+	.dsm-flipbox {
+    	height: 255px;
+	}
+}
+@media only screen and (max-width: 1020px) {
+		#form .iump-form-line-register.iump-form-recaptcha .g-recaptcha-wrapper{ width: 100% !important}
+	.dsm-flipbox {
+    	height: 285px;
+	}
+}
+
+/* ==========================================================================
+   IFMi Espace pro — CSS adicional
+   Refactorizado: variables, deduplicación de reglas y media queries,
+   corrección de valores CSS inválidos. Comportamiento visual preservado
+   salvo los puntos marcados explícitamente con "FIX:".
+   ========================================================================== */
+
+:root {
+  -color-blue: #006ab4;
+  -color-blue-alt: #0071b9;
+  -color-input-bg: #e5f0f7;
+  -color-accent-light: #e1edf5;
+  -color-text-muted: #333333ad;
+  -font-primary: "Poppins", sans-serif;
+  -radius-sm: 5px;
+  -radius-md: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Tracking / campos ocultos
+   -------------------------------------------------------------------------- */
+.iump-form-gclid,
+.iump-form-gbraid,
+.iump-form-wbraid,
+.iump-form-gad_source {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Páginas sin cabecera (landing / embed)
+   -------------------------------------------------------------------------- */
+.page-id-13 header,
+.page-id-16 header,
+.page-id-24764 header,
+.page-id-110 header {
+  display: none;
+}
+
+.page-id-24764 .et_pb_section,
+.page-id-110 .et_pb_section {
+  padding: 25px 0 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Formularios — recaptcha / registro / login
+   -------------------------------------------------------------------------- */
+.iump-form-recaptcha {
+  width: 100% !important;
+}
+
+.ihc-register-14 .iump-form-line-register input[type="number"] {
+  width: 100% !important;
+  padding: 12px !important;
+  box-sizing: border-box !important;
+  background-color: var(--color-input-bg) !important;
+  border: 1px solid var(--color-input-bg) !important;
+  border-radius: var(--radius-sm) !important;
+  color: var(--color-text-muted) !important;
+  font-family: var(--font-primary) !important;
+  font-size: 12px !important;
+  font-weight: 600 !important;
+}
+
+.page-id-12 .iump-form-Numero_de_telephone,
+.page-id-110 .iump-form-Numero_de_telephone {
+  display: none;
+}
+
+.ihc-ap-theme-4 .ihc-ap-wrap {
+  margin: 35px 30px 20px 30px;
+}
+
+body.login div#login form input[type="submit"] {
+  width: 100%;
+  font-family: var(--font-primary) !important;
+  font-size: 14px !important;
+  font-weight: 400;
+  color: var(--color-blue) !important;
+  background-color: transparent;
+  border: 2px solid var(--color-blue) !important;
+  border-radius: 3px;
+  text-transform: capitalize !important;
+  box-shadow: none !important;
+}
+body.login div#login form input[type="submit"]:hover {
+  color: #fff;
+  background-color: var(--color-blue) !important;
+}
+
+.iump-register-form .iump-form-line-register input[type="text"],
+.iump-register-form .iump-form-line-register input[type="password"],
+.iump-register-form .iump-form-line-register select,
+.iump-register-form .iump-form-line-register textarea,
+.iump-register-form .iump-form-line-register .select2-selection {
+  min-height: 45px;
+}
+
+.iump-form-line-register .iump-form-checkbox {
+  font-family: var(--font-primary);
+}
+
+/* Registro: "Autres spécialités" en dos columnas alineadas */
+.iump-register-form .iump-form-otros_profesionales .iump-form-checkbox-wrapper {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 15px;
+  row-gap: 10px;
+  align-items: start;
+}
+.iump-register-form .iump-form-otros_profesionales .iump-form-checkbox {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  width: auto;
+  margin: 0;
+  line-height: 1.3;
+  overflow-wrap: anywhere;
+}
+.iump-register-form .iump-form-otros_profesionales .iump-form-checkbox input[type="checkbox"] {
+  flex: 0 0 auto;
+  margin: 2px 0 0;
+}
+@media only screen and (max-width: 400px) {
+  .iump-register-form .iump-form-otros_profesionales .iump-form-checkbox-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Carrito flotante / botón sticky
+   -------------------------------------------------------------------------- */
+.xoo-wsc-container,
+.xoo-wsc-slider {
+  z-index: 999999999 !important;
+}
+
+#bouton-sticky {
+  position: fixed;
+  right: 1%;
+  bottom: 1%;
+  /* FIX: existían dos reglas para #bouton-sticky con z-index distinto
+     (88888888 !important y 999999999 sin !important); al tener !important
+     ganaba siempre el valor más bajo. Se unifica en una sola regla. */
+  z-index: 999999999 !important;
+}
+
+/* --------------------------------------------------------------------------
+   Cabecera de cuenta (avatar + nombre + desconexión)
+   -------------------------------------------------------------------------- */
+#blocInfo {
+  display: flex !important;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: nowrap;
+  gap: 8px;
+  margin-right: 0 !important;
+  margin-bottom: 0 !important;
+}
+#blocInfo img {
+  width: 36px !important;
+  height: 36px !important;
+  border-radius: 50% !important;
+  object-fit: cover;
+}
+
+/* --------------------------------------------------------------------------
+   Cuenta / mi perfil — botones de envío
+   -------------------------------------------------------------------------- */
+#edituser .iump-submit-form input,
+.ihc-register-9 .iump-submit-form input {
+  background-color: var(--color-blue-alt) !important;
+  padding: 15px 25px !important;
+  border: none !important;
+  border-radius: var(--radius-md) !important;
+  font-family: var(--font-primary) !important;
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: var(--color-accent-light) !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  margin-top: 10px !important;
+}
+#edituser .iump-submit-form input:hover {
+  background-color: #fad6ad !important; /* NOTA: difiere en un carácter de #fad6ae usado en el menú; revisar si es intencional */
+  color: var(--color-blue-alt) !important;
+}
+.ihc-register-9 .iump-submit-form input:hover {
+  background-color: var(--color-accent-light) !important;
+  color: var(--color-blue-alt) !important;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive — página de cuenta (ihc-ap-theme-4)
+   -------------------------------------------------------------------------- */
+@media only screen and (min-width: 1450px) {
+  .ihc-ap-menu {
+    width: 100%;
+    margin: auto 10%;
+  }
+}
+
+@media only screen and (min-width: 1000px) and (max-width: 1449px) {
+  .ihc-ap-theme-4 .ihc-ap-menu .ihc-ap-menu-item a {
+    display: inline-block;
+    vertical-align: bottom;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
+    font-size: 13px !important;
+    box-shadow: none;
+    text-decoration: none;
+  }
+  .ihc-ap-theme-4 .ihc-ap-menu .ihc-ap-menu-item {
+    margin: 5px !important;
+  }
+}
+
+/* Reglas comunes a todo el rango ≤1000px (antes repetidas en 3 media queries) */
+@media only screen and (max-width: 1000px) {
+  .ihc-ap-theme-4 .ihc-ap-wrap {
+    width: 100% !important;
+  }
+  .conteneurorder {
+    flex-direction: column !important;
+  }
+  .blocorder1 {
+    width: 100% !important;
+  }
+  .iump-form-domaineinteret {
+    width: 100% !important;
+  }
+  .iump-form-domaineinteret .iump-form-checkbox {
+    width: 250px !important;
+    font-size: 16px !important;
+  }
+}
+
+/* Reglas comunes a 600–1000px (antes duplicadas en dos media queries) */
+@media only screen and (min-width: 600px) and (max-width: 1000px) {
+  .ihc-ap-theme-4 .ihc-ap-menu .ihc-ap-menu-item a {
+    display: inline-block;
+    vertical-align: bottom;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+    font-size: 11px !important;
+    box-shadow: none;
+    text-decoration: none;
+  }
+  .ihc-ap-theme-4 .ihc-ap-menu .ihc-ap-menu-item {
+    margin: 5px !important;
+  }
+}
+
+@media only screen and (min-width: 800px) and (max-width: 1000px) {
+  .ihc-ap-theme-4 .ihc-ap-wrap {
+    padding: 20px !important;
+  }
+  .blocorder {
+    width: 100% !important;
+  }
+  #changepassword .iump-form-password label {
+    font-size: 10px;
+  }
+}
+
+/* Reglas comunes a ≤799px (menú móvil + blocorder + changepassword) */
+@media only screen and (max-width: 799px) {
+  .ihc-mobile-bttn-wrapp {
+    display: initial;
+    clear: both;
+    width: 100%;
+    height: 40px;
+  }
+  .ihc-ap-menu {
+    display: none;
+  }
+  .ihc-mobile-bttn {
+    background-color: #333333;
+  }
+  .blocorder {
+    display: none;
+  }
+  .ihc-ap-top-theme-4 .ihc-left-side {
+    display: none;
+  }
+  .iump-user-page-name {
+    display: none;
+  }
+  .ihc-ap-top-theme-4 {
+    height: 230px;
+  }
+  #changepassword {
+    display: flex !important;
+    flex-direction: column !important;
+    flex-wrap: wrap !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+  }
+  #changepassword .iump-form-line-register {
+    width: 100% !important;
+  }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 799px) {
+  .ihc-ap-top-theme-4 .ihc-middle-side {
+    margin-left: 0;
+    margin-top: -35px;
+  }
+}
+
+@media only screen and (min-width: 200px) and (max-width: 599px) {
+  .ihc-mobile-bttn {
+    width: 100%;
+    height: 40px;
+    text-align: center;
+    cursor: pointer;
+    font-family: var(--font-primary);
+  }
+  .ihc-ap-top-theme-4 .ihc-middle-side {
+    margin-left: 0;
+    margin-top: 20px;
+  }
+  .ihc-ap-top-theme-4 .ihc-account-page-top-extra-mess {
+    display: initial;
+  }
+  .ihc-user-page-top-ap-wrapper .ihc-account-page-top-mess {
+    display: inline-block;
+    padding-top: 5px;
+    padding-left: 0;
+    font-size: 14px !important;
+    font-family: var(--font-primary);
+    word-break: break-word;
+  }
+  .ihc-user-page-top-ap-wrapper .ihc-top-levels {
+    margin: 0 !important;
+    padding-left: 0 !important;
+  }
+  .ihc-ap-theme-4 .ihc-ap-menu .ihc-ap-menu-item {
+    width: 90%;
+  }
+  .ihc-ap-theme-4 .ihc-ap-menu .ihc-ap-menu-item a {
+    width: 100%;
+    margin: auto;
+    line-height: 40px;
+    text-align: center;
+    color: #fff;
+    border: none;
+  }
+  .ihc-ap-theme-4 .ihc-ap-wrap {
+    padding: 0 !important;
+  }
+  .textexplicatif {
+    padding-left: 0 !important;
+  }
+  .iump-form-html1 {
+    margin-top: 50px;
+  }
+  .iump-form-html1 h3 {
+    width: 200px;
+  }
+  #edituser {
+    display: flex !important;
+    flex-direction: row !important;
+    flex-wrap: wrap !important;
+    width: 100%;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Recortes / utilidades varias
+   -------------------------------------------------------------------------- */
+.cropControls {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Coup de cœur (favoritos)
+   -------------------------------------------------------------------------- */
+.ccc-favorite-post-toggle[data-ccc_my_favorites-select_button-style="1"] {
+  position: relative;
+  z-index: 10;
+  text-align: left;
+}
+.ccc-favorite-post-toggle > a {
+  display: inline-block;
+  vertical-align: top;
+  box-sizing: border-box;
+  padding: 0 6px;
+  color: #ee7f01 !important;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.ccc-favorite-post-toggle > a:before {
+  content: "\f08a";
+  font-size: 20px;
+  font-weight: 900;
+}
+#ccc-my_favorite-list[data-ccc_my_favorites-list-style="1"] .list-ccc_favorite {
+  position: relative;
+  width: calc(33% - 1%) !important;
+  margin: 0 1% 1% 0;
+}
+#ccc-my_favorite-list .header-ccc_favorite {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Grid WikiMi
+   -------------------------------------------------------------------------- */
+.wpgb-block-1 span:nth-child(n + 4) {
+  display: none !important;
+}
+.wp-grid-builder .wpgb-card-8 .wpgb-block-4 {
+  border-style: none !important;
+  color: #d93;
+}
+
+/* --------------------------------------------------------------------------
+   Footer
+   -------------------------------------------------------------------------- */
+footer {
+  display: none;
+}
+#main-footer > .container {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Formulario de contacto / partenaire (contact form 7)
+   -------------------------------------------------------------------------- */
+#formulaire-responsive {
+  width: 100%;
+  max-width: 100%; /* ajustar si se desea un ancho distinto */
+  margin: 0 auto;
+}
+.rang-form {
+  width: 100%;
+}
+.demi-colonne,
+.colonne {
+  position: relative;
+  float: left;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 0 15px;
+  margin-top: -15px;
+  margin-bottom: 30px;
+}
+.colonne2 {
+  margin-top: -30px;
+}
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+@media only screen and (min-width: 48em) {
+  .demi-colonne {
+    width: 50%;
+  }
+}
+
+.wpcf7-list-item {
+  margin: 0 !important;
+}
+.wpcf7-list-item-label {
+  font-size: 9px !important;
+}
+.temoignage .wpcf7-list-item-label {
+  font-size: 12px !important;
+  color: var(--color-text-muted);
+  font-family: var(--font-primary);
+  font-weight: 600;
+}
+#wpcf7-f487-o1 .wpcf7-list-item-label {
+  line-height: 1.1 !important;
+}
+.colonne p,
+.colonne2 p {
+  line-height: 1.1 !important;
+}
+
+.wpcf7 input[type="text"],
+.wpcf7 input[type="email"],
+.wpcf7 input[type="file"],
+.wpcf7 textarea,
+.wpcf7 select {
+  width: 100%;
+  padding: 12px;
+  box-sizing: border-box;
+  background-color: var(--color-input-bg);
+  border: 1px solid var(--color-input-bg);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-muted);
+  font-family: var(--font-primary);
+  font-size: 12px;
+  font-weight: 600;
+}
+.wpcf7 input[type="text"]:focus,
+.wpcf7 input[type="email"]:focus,
+.wpcf7 textarea:focus,
+.wpcf7 select:focus {
+  background: #fff;
+}
+
+.wpcf7-submit {
+  float: left;
+  height: 42px;
+  padding: 0 20px;
+  color: var(--color-accent-light);
+  font-family: var(--font-primary);
+  font-size: 15px;
+  font-weight: 600;
+  background-color: var(--color-blue);
+  border: 2px solid var(--color-blue);
+  border-radius: var(--radius-md);
+}
+.wpcf7-submit:hover {
+  color: var(--color-blue);
+  background-color: var(--color-input-bg);
+  border-color: var(--color-input-bg);
+}
+
+span.wpcf7-not-valid-tip {
+  padding: 5px;
+  color: #fff;
+  background: #ff0000;
+  font-size: 12px;
+  text-shadow: none;
+}
+div.wpcf7-validation-errors {
+  margin: 0;
+  padding: 5px;
+  color: #9c6533;
+  background: #f9cd00;
+  border: transparent;
+  text-align: center;
+  text-shadow: none;
+  font-size: 12px;
+}
+.wpcf7 form.sent .wpcf7-response-output {
+  margin-top: 0;
+  padding: 5px; /* alineado con el resto de mensajes de formulario */
+  color: #59a80f;
+  background-color: #ffffff;
+  border-color: #59a80f !important;
+  text-align: center;
+  font-family: var(--font-primary);
+  font-size: 15px;
+}
+
+/* --------------------------------------------------------------------------
+   Menú de cabecera
+   -------------------------------------------------------------------------- */
+.et_pb_menu--without-logo .et_pb_menu__menu > nav > ul > li > a {
+  margin: 0 15px;
+  padding-bottom: 8px;
+}
+.ld-menu-adh {
+  margin-top: 0 !important;
+  padding: 10px 10px 3px 10px;
+  background-color: #ef7d00;
+  color: #fad6ae;
+  border-radius: var(--radius-md);
+}
+.ld-menu-adh a,
+.menu-item-20745 a,
+.et_pb_menu_page_id-22 a {
+  color: #fad6ae !important;
+}
+.et_pb_menu_0_tb_header.et_pb_menu ul li:nth-child(8) a,
+.et_pb_menu_1_tb_header.et_pb_menu ul li a {
+  color: #ffffff !important;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.et_pb_menu_page_id-22.menu-item {
+	border-radius: 8px;
+}
+
+/* --------------------------------------------------------------------------
+   Páginas específicas
+   -------------------------------------------------------------------------- */
+.page-id-13 .launcher-button {
+  display: none !important;
+}
+.page-id-13 .et_pb_gutters2,
+.page-id-15 .et_pb_gutters2 {
+  border-color: #ebeff3;
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+}
+.page-id-13 .et_pb_gutters2 .et_pb_column_0,
+.page-id-15 .et_pb_gutters2 .et_pb_column_1 {
+  box-shadow: 0 0 0 0 rgba(0, 0, 0, 0);
+}
+.page-id-15 .et_pb_section_0.et_pb_section {
+  padding-top: 1%;
+}
+
+.page-id-16 .ihc-login-template-13.ihc-pass-form-wrap .impu-form-submit input {
+  width: auto !important;
+  min-width: 250px !important;
+  margin: 20px auto 10px;
+  background-color: var(--color-blue) !important;
+  /* FIX: la propiedad "border-color" no admite la sintaxis "1px solid #006ab4"
+     (solo acepta un color); se sustituye por el shorthand correcto "border". */
+  border: 1px solid var(--color-blue) !important;
+  font-family: var(--font-primary);
+}
+.page-id-16 .impu-form-pass-additional-content {
+  padding: 15px 15px 0;
+  color: #333333;
+  font-size: 16px;
+  font-family: var(--font-primary);
+  text-align: center;
+}
+
+.page-id-189 .post-20355 .price,
+.page-id-20160 .post-20355 .price {
+  /* FIX: el valor original "display:price" no es válido en CSS y la regla
+     no tenía ningún efecto; se sustituye por "block" para forzar la
+     visualización del precio. */
+  display: block !important;
+}
+
+/* --------------------------------------------------------------------------
+   WooCommerce
+   -------------------------------------------------------------------------- */
+.download-remaining,
+.download-expires,
+.order-again {
+  display: none;
+}
+.woocommerce-orders-table__cell-order-actions .view {
+  margin-right: 10px !important;
+}
+.woocommerce-product-gallery__image {
+  pointer-events: none !important;
+}
+.woocommerce-product-gallery__trigger {
+  display: none !important;
+}
+
+/* --------------------------------------------------------------------------
+   Membresía — varios
+   -------------------------------------------------------------------------- */
+#ihc_ap_subscription_l_0 div:nth-child(4) {
+  display: none;
+}
+
+/* --------------------------------------------------------------------------
+   Visor PDF
+   -------------------------------------------------------------------------- */
+.pdfp_wrapper {
+  display: flex;
+  flex-direction: column-reverse;
+}
+.cta_wrapper {
+  margin-top: 10px;
+  text-align: center;
+}
+.pdfp_fullscreen button {
+  padding: 8px 20px;
+  color: var(--color-accent-light);
+  background-color: var(--color-blue);
+  border: 1px solid var(--color-blue);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+}
+.pdfp_fullscreen button:hover {
+  color: var(--color-blue);
+  background-color: var(--color-accent-light);
+  border-color: var(--color-accent-light);
+}
+.promagnifier {
+  pointer-events: none;
+}
+
+/* --------------------------------------------------------------------------
+   Búsqueda
+   -------------------------------------------------------------------------- */
+.post-meta {
+  display: none;
+}
+.search-results {
+  padding-top: 125px;
+}
+
+/* --------------------------------------------------------------------------
+   Utilidades de layout
+   -------------------------------------------------------------------------- */
+@media only screen and (max-width: 980px) {
+  .dc-inverser-colonnes--section .dc-inverser-colonnes--ligne {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+}
+
+.centrer-verticalement {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.postid-26484 .et_pb_section.et_pb_section_0_tb_body.et_section_regular{
+	padding-top: 150px !important;
+}
