@@ -67,6 +67,7 @@
             name:             $('#mgmit-name').val().trim(),
             formId:           $('#mgmit-form-selector').val().trim(),
             hubspotFormName:  doNotCollect ? '' : $('#mgmit-hs-form-name').val().trim(),
+            hs_form_guid:     doNotCollect ? '' : $('#mgmit-hs-form-guid').val().trim(),
             source:           doNotCollect ? '' : $('#mgmit-source').val(),
             email_field:      doNotCollect ? '' : $('#mgmit-email-field').val().trim(),
             fields:           fields,

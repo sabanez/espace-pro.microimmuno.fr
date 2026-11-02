@@ -286,6 +286,7 @@ class MGMIT_Mapper_Admin_UI {
         $static_fields     = $is_new ? array() : (isset($mapping['static_fields']) && is_array($mapping['static_fields']) ? $mapping['static_fields'] : array());
         $current_id        = $is_new ? '' : (isset($mapping['id']) ? $mapping['id'] : $mapping_id);
         $do_not_collect    = !$is_new && !empty($mapping['do_not_collect']);
+        $hs_form_guid      = $is_new ? '' : (isset($mapping['hs_form_guid']) ? $mapping['hs_form_guid'] : '');
 
         $adapter_labels = $this->get_adapter_labels();
         $list_url       = admin_url('admin.php?page=hubspot-mapper');
@@ -355,6 +356,21 @@ class MGMIT_Mapper_Admin_UI {
                                 <p class="description">
                                     Nombre del formulario en HubSpot. Aparecerá tal cual en
                                     <em>Marketing &rarr; Formularios</em>. Admite espacios, guiones y corchetes.
+                                </p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th scope="row"><label for="mgmit-hs-form-guid">ID del formulario (opcional)</label></th>
+                            <td>
+                                <input type="text" id="mgmit-hs-form-guid" class="regular-text code"
+                                    value="<?php echo esc_attr($hs_form_guid); ?>"
+                                    placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx">
+                                <p class="description">
+                                    Si lo indicas, se usa este formulario y <strong>no se busca ni se crea nada por nombre</strong>.
+                                    Necesario cuando el formulario está en otra marca (unidad de negocio) de HubSpot, porque
+                                    la búsqueda por nombre solo ve los de la marca por defecto. Lo encuentras en la URL del
+                                    formulario en HubSpot (<code>.../forms/&lt;portal&gt;/editor/<strong>&lt;ID&gt;</strong>/edit</code>).
+                                    Si lo dejas vacío, se rellena solo tras el primer envío.
                                 </p>
                             </td>
                         </tr>
@@ -499,6 +515,7 @@ class MGMIT_Mapper_Admin_UI {
         $name            = isset($_POST['name'])            ? sanitize_text_field($_POST['name'])            : '';
         $form_id         = isset($_POST['formId'])          ? sanitize_text_field($_POST['formId'])          : '';
         $hs_form_name    = isset($_POST['hubspotFormName']) ? sanitize_text_field($_POST['hubspotFormName']) : '';
+        $hs_form_guid    = isset($_POST['hs_form_guid'])    ? sanitize_text_field($_POST['hs_form_guid'])    : '';
         $source          = isset($_POST['source'])          ? sanitize_text_field($_POST['source'])          : '';
         $email_field     = isset($_POST['email_field'])     ? sanitize_text_field($_POST['email_field'])     : '';
         $fields_raw         = isset($_POST['fields'])         ? (array) $_POST['fields']         : array();
@@ -584,6 +601,20 @@ class MGMIT_Mapper_Admin_UI {
             'value_maps'      => $do_not_collect ? array() : $value_maps,
             'do_not_collect'  => $do_not_collect,
         );
+
+        // Conservar el formulario de HubSpot ya vinculado (antes se perdía al guardar y se volvía a buscar
+        // o crear por nombre). Si cambia el nombre o el ID manual, se descarta lo sincronizado.
+        $hs_form_guid = $do_not_collect ? '' : trim($hs_form_guid);
+        if ($hs_form_guid !== '') {
+            $new_entry['hs_form_guid'] = $hs_form_guid;
+            foreach ($this->get_config() as $old) {
+                if (isset($old['id']) && $old['id'] === $new_entry['id']
+                    && isset($old['hs_form_guid']) && $old['hs_form_guid'] === $hs_form_guid
+                    && isset($old['hs_form_fields_synced']) && isset($old['hubspotFormName'])) {
+                    $new_entry['hs_form_fields_synced'] = $old['hs_form_fields_synced'];
+                }
+            }
+        }
 
         $config = $this->get_config();
         $found  = false;

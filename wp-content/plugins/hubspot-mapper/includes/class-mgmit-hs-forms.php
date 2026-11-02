@@ -419,7 +419,10 @@ class MGMIT_HS_Forms {
     }
 
     /**
-     * Busca en HubSpot un formulario por nombre exacto vía Forms API v2.
+     * Busca en HubSpot un formulario por nombre exacto en TODAS las marcas (unidades de negocio).
+     *
+     * La lista sin parámetros solo devuelve los formularios de la marca por defecto, así que además
+     * se consulta cada unidad de negocio con `businessUnitId` (Forms API v2 y v3).
      *
      * @param string $form_name
      * @return string formGuid o cadena vacía si no existe o hay error.
@@ -430,36 +433,108 @@ class MGMIT_HS_Forms {
             return '';
         }
 
-        $url = self::get_api_base() . '/forms/v2/forms';
+        $base  = self::get_api_base();
+        $units = array_merge(array(''), self::get_business_unit_ids($token));
 
-        $response = wp_remote_get(
-            $url,
-            array(
-                'headers' => array('Authorization' => 'Bearer ' . $token),
-                'timeout' => 20,
-            )
-        );
+        foreach ($units as $unit) {
+            $qs = $unit !== '' ? '?businessUnitId=' . rawurlencode($unit) : '';
 
-        if (is_wp_error($response)) {
-            return '';
-        }
+            // Forms API v2: lista completa en una llamada.
+            $forms = self::api_get_json($token, $base . '/forms/v2/forms' . $qs);
+            if (is_array($forms)) {
+                foreach ($forms as $form) {
+                    if (isset($form['name']) && $form['name'] === $form_name && !empty($form['guid'])) {
+                        self::log('find_form_by_name: "' . $form_name . '" en v2' . ($unit !== '' ? ' (marca ' . $unit . ')' : '') . ' guid=' . $form['guid']);
+                        return (string) $form['guid'];
+                    }
+                }
+            }
 
-        if ((int) wp_remote_retrieve_response_code($response) !== 200) {
-            return '';
-        }
-
-        $forms = json_decode(wp_remote_retrieve_body($response), true);
-        if (!is_array($forms)) {
-            return '';
-        }
-
-        foreach ($forms as $form) {
-            if (isset($form['name']) && $form['name'] === $form_name && !empty($form['guid'])) {
-                return (string) $form['guid'];
+            // Forms API v3: paginada.
+            $after = '';
+            for ($page = 0; $page < 20; $page++) {
+                $url = $base . self::API_FORMS_PATH . '?limit=100'
+                    . ($unit !== '' ? '&businessUnitId=' . rawurlencode($unit) : '')
+                    . ($after !== '' ? '&after=' . rawurlencode($after) : '');
+                $data = self::api_get_json($token, $url);
+                if (!is_array($data) || empty($data['results'])) {
+                    break;
+                }
+                foreach ($data['results'] as $form) {
+                    if (isset($form['name']) && $form['name'] === $form_name && !empty($form['id'])) {
+                        self::log('find_form_by_name: "' . $form_name . '" en v3' . ($unit !== '' ? ' (marca ' . $unit . ')' : '') . ' guid=' . $form['id']);
+                        return (string) $form['id'];
+                    }
+                }
+                $after = isset($data['paging']['next']['after']) ? (string) $data['paging']['next']['after'] : '';
+                if ($after === '') {
+                    break;
+                }
             }
         }
 
+        self::log('find_form_by_name: "' . $form_name . '" no encontrado (marcas consultadas: ' . (count($units) - 1) . ')');
         return '';
+    }
+
+    /**
+     * IDs de las unidades de negocio (marcas) del portal. Se descubren con la API de Business Units
+     * (necesita el scope business_units_view.read en la app privada); si no está disponible se usa
+     * la opción `mgmit_business_unit_ids` (IDs separados por comas).
+     *
+     * @param string $token
+     * @return string[]
+     */
+    private static function get_business_unit_ids($token) {
+        $ids = array();
+
+        $manual = (string) get_option('mgmit_business_unit_ids', '');
+        foreach (preg_split('/[\s,;]+/', $manual, -1, PREG_SPLIT_NO_EMPTY) as $id) {
+            $ids[] = $id;
+        }
+
+        $cached = get_transient('mgmit_business_unit_ids');
+        if (is_array($cached)) {
+            $ids = array_merge($ids, $cached);
+        } else {
+            $found = array();
+            $user  = self::api_get_json($token, self::get_api_base() . '/oauth/v1/access-tokens/' . rawurlencode($token));
+            $uid   = (is_array($user) && !empty($user['user_id'])) ? $user['user_id'] : '';
+            if ($uid !== '') {
+                $res = self::api_get_json($token, self::get_api_base() . '/business-units/v3/business-units/user/' . rawurlencode((string) $uid));
+                if (is_array($res) && !empty($res['results'])) {
+                    foreach ($res['results'] as $bu) {
+                        if (isset($bu['id'])) {
+                            $found[] = (string) $bu['id'];
+                        }
+                    }
+                }
+            }
+            self::log('get_business_unit_ids: descubiertas = ' . ($found ? implode(', ', $found) : 'ninguna (define la opción mgmit_business_unit_ids si hay varias marcas)'));
+            set_transient('mgmit_business_unit_ids', $found, $found ? DAY_IN_SECONDS : HOUR_IN_SECONDS);
+            $ids = array_merge($ids, $found);
+        }
+
+        return array_values(array_unique($ids));
+    }
+
+    /**
+     * GET autenticado que devuelve el JSON decodificado o null si falla.
+     */
+    private static function api_get_json($token, $url) {
+        $response = wp_remote_get($url, array(
+            'headers' => array('Authorization' => 'Bearer ' . $token),
+            'timeout' => 20,
+        ));
+        if (is_wp_error($response)) {
+            return null;
+        }
+        $code = (int) wp_remote_retrieve_response_code($response);
+        if ($code !== 200) {
+            self::log('GET ' . preg_replace('#\?.*$#', '', $url) . ' HTTP ' . $code . (strpos($url, 'businessUnitId') !== false ? ' (con businessUnitId)' : ''));
+            return null;
+        }
+        return json_decode(wp_remote_retrieve_body($response), true);
     }
 
     /**

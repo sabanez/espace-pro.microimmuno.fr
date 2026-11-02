@@ -1,5 +1,18 @@
 # Changelog — HubSpot Mapper
 
+## [2.8.3] — 2026-11-02
+
+### Corregido
+- La búsqueda de formulario por nombre ahora recorre **todas las marcas** (unidades de negocio): lista de la marca por defecto y de cada unidad con `businessUnitId`, en Forms API v2 y v3 (paginada). Las marcas se descubren con la API de Business Units (scope `business_units_view.read`) o con la opción `mgmit_business_unit_ids` (IDs separados por comas). Cada paso queda en el log.
+
+## [2.8.2] — 2026-11-02
+
+### Añadido
+- **ID del formulario de HubSpot (opcional)** en el editor del mapeo. Si se indica, se usa ese formulario y no se busca ni se crea nada por nombre. Resuelve el caso de portales con varias marcas (unidades de negocio): la búsqueda por nombre solo ve los formularios de la marca por defecto, no encontraba el de la otra y creaba uno nuevo en la marca por defecto.
+
+### Corregido
+- Al guardar un mapeo se perdía el formulario ya vinculado (`hs_form_guid`) y el siguiente envío volvía a buscarlo o crearlo por nombre. Ahora se conserva.
+
 ## [2.8.1] — 2026-10-29
 
 ### Cambiado
