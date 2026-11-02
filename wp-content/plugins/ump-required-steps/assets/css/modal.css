@@ -1,0 +1,337 @@
+/* UMP Required Steps — modal bloqueante (sin botón de cierre).
+ *
+ * Los colores y la fuente salen de las mismas variables que usa el tema
+ * (--iump-primary-font de UMP, --color-blue-alt y --color-accent-light del tema hijo)
+ * con valores de respaldo, así que si cambian en el tema la modal los sigue.
+ */
+.umprs {
+    --umprs-bg: #fff;
+    --umprs-fg: #1d2327;
+    --umprs-radius: 10px;
+    --umprs-font: var(--iump-primary-font, "Poppins", sans-serif);
+    --umprs-accent: var(--color-blue-alt, #0071b9);
+    --umprs-accent-ink: var(--color-accent-light, #e1edf5);
+    --umprs-accent-soft: #fad6ad;
+    --umprs-border: rgba(0, 0, 0, .15);
+    --umprs-control-radius: 5px;
+    --umprs-error: #d63638;
+    --umprs-fs: 14px;
+
+    padding: 0;
+    border: 0;
+    border-radius: var(--umprs-radius);
+    background: var(--umprs-bg);
+    color: var(--umprs-fg);
+    font-family: var(--umprs-font);
+    font-size: var(--umprs-fs);
+    width: min(680px, calc(100vw - 32px));
+    max-height: calc(100vh - 32px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
+}
+
+.umprs::backdrop {
+    background: rgba(15, 23, 42, .65);
+    backdrop-filter: blur(2px);
+}
+
+/* Sin showModal() (navegador antiguo o JS desactivado): overlay equivalente. */
+.umprs[open]:not(:modal) {
+    position: fixed;
+    inset: 0;
+    margin: auto;
+    z-index: 2147483000;
+    height: fit-content;
+    box-shadow: 0 0 0 100vmax rgba(15, 23, 42, .65);
+}
+
+.umprs__panel {
+    padding: 28px 28px 24px;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
+}
+
+.umprs__title {
+    margin: 0 0 12px;
+    padding: 0;
+    font-family: var(--umprs-font);
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--umprs-accent);
+}
+
+.umprs__intro {
+    margin-bottom: 18px;
+    font-size: var(--umprs-fs);
+    line-height: 1.5;
+}
+
+.umprs__intro > :last-child {
+    margin-bottom: 0;
+}
+
+.umprs__errors {
+    margin: 0 0 16px;
+    padding: 10px 14px;
+    border-left: 4px solid var(--umprs-error);
+    border-radius: 4px;
+    background: #fcf0f1;
+    color: #8a1f21;
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+.umprs__errors p {
+    margin: 0;
+}
+
+.umprs__errors p + p {
+    margin-top: 4px;
+}
+
+body.umprs-open {
+    overflow: hidden;
+}
+
+/* ==========================================================================
+   Formulario de UMP dentro de la modal
+   El selector con #umprs-modal gana a las reglas de la plantilla de UMP y del
+   tema (muchas con !important), que están pensadas para otra página.
+   ========================================================================== */
+
+/* Contenedores de UMP: sin límites de ancho ni márgenes de la plantilla. */
+#umprs-modal .umprs__body .iump-user-page-wrapper,
+#umprs-modal .umprs__body .iump-user-page-box,
+#umprs-modal .umprs__body .iump-register-form {
+    width: 100%;
+    min-width: 0 !important;
+    max-width: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    box-shadow: none;
+    background: none;
+    font-family: var(--umprs-font);
+    font-size: var(--umprs-fs);
+}
+
+/* Cuadrícula: 2 columnas; los campos largos ocupan las dos. */
+#umprs-modal #edituser {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 4px 20px;
+    width: 100%;
+    margin: 0;
+}
+
+#umprs-modal #edituser > :not(.iump-form-line-register) {
+    grid-column: 1 / -1;
+}
+
+/* Los campos del paso se muestran siempre en la modal. El tema oculta algunos campos en la
+   página de cuenta (p. ej. `.page-id-12 .iump-form-Numero_de_telephone { display: none }`):
+   si uno de ellos es obligatorio, quedaba invisible e impedía enviar sin mostrar ningún aviso.
+   Sin !important a propósito: la lógica condicional de UMP oculta con estilos en línea. */
+#umprs-modal #edituser .iump-form-line-register {
+    display: block;
+    width: auto !important;
+    min-width: 0;
+    margin: 0;
+    padding: 8px 0;
+    float: none;
+}
+
+#umprs-modal #edituser .iump-form-line-register:is(
+    .iump-form-checkbox,
+    .iump-form-single_checkbox,
+    .iump-form-radio,
+    .iump-form-textarea,
+    .iump-form-multi_select,
+    .iump-form-file,
+    .iump-form-html,
+    .iump-form-plain_text
+) {
+    grid-column: 1 / -1;
+}
+
+#umprs-modal #edituser .iump-clear {
+    display: none;
+}
+
+/* Etiquetas. */
+#umprs-modal .iump-labels-register {
+    display: block;
+    min-width: 0;
+    margin: 0 0 6px;
+    padding: 0;
+    box-sizing: border-box;
+    text-align: left;
+    font-family: var(--umprs-font) !important;
+    font-size: 13px !important;
+    font-weight: 600 !important;
+    line-height: 1.4 !important;
+    color: #444 !important;
+}
+
+#umprs-modal .ihc-required-sign {
+    margin-right: 2px;
+    color: var(--umprs-error);
+}
+
+/* Campos de texto, números, selects y textareas: una sola apariencia. */
+#umprs-modal :is(
+    input[type="text"], input[type="number"], input[type="password"],
+    input[type="email"], input[type="tel"], input[type="date"], select, textarea
+) {
+    display: block;
+    width: 100% !important;
+    min-height: 44px !important;
+    box-sizing: border-box !important;
+    padding: 10px 12px !important;
+    border: 2px solid var(--umprs-border) !important;
+    border-radius: var(--umprs-control-radius) !important;
+    background-color: #fff !important;
+    box-shadow: none;
+    color: #2b2b2b !important;
+    font-family: var(--umprs-font) !important;
+    font-size: var(--umprs-fs) !important;
+    font-weight: 400 !important;
+    line-height: 1.4 !important;
+}
+
+#umprs-modal textarea {
+    min-height: 100px !important;
+    resize: vertical;
+}
+
+#umprs-modal :is(input, select, textarea):focus {
+    outline: none;
+    border-color: var(--umprs-accent) !important;
+    box-shadow: 0 0 0 3px rgba(0, 113, 185, .2);
+}
+
+#umprs-modal .ihc-input-notice {
+    border-color: var(--umprs-error) !important;
+}
+
+/* Grupos de checkbox / radio: rejilla ordenada, una "tarjeta" por opción. */
+#umprs-modal :is(.iump-form-checkbox-wrapper, .iump-form-radiobox-wrapper) {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 8px 12px;
+}
+
+#umprs-modal :is(
+    .iump-form-checkbox-wrapper > .iump-form-checkbox,
+    .iump-form-radiobox-wrapper > .iump-form-radiobox
+) {
+    display: flex !important;
+    align-items: flex-start;
+    gap: 10px;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 10px 12px;
+    box-sizing: border-box;
+    border: 1px solid var(--umprs-border);
+    border-radius: var(--umprs-control-radius);
+    font: 400 var(--umprs-fs)/1.35 var(--umprs-font) !important;
+    color: #2b2b2b;
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+#umprs-modal :is(
+    .iump-form-checkbox-wrapper > .iump-form-checkbox,
+    .iump-form-radiobox-wrapper > .iump-form-radiobox
+) > input {
+    flex: none;
+    width: 18px !important;
+    height: 18px;
+    min-height: 0 !important;
+    margin: 1px 0 0 !important;
+    padding: 0 !important;
+    accent-color: var(--umprs-accent);
+}
+
+#umprs-modal :is(
+    .iump-form-checkbox-wrapper > .iump-form-checkbox,
+    .iump-form-radiobox-wrapper > .iump-form-radiobox
+):has(> input:checked) {
+    border-color: var(--umprs-accent);
+    background: rgba(0, 113, 185, .07);
+}
+
+/* Textos secundarios y errores. */
+#umprs-modal .iump-form-sublabel {
+    display: block;
+    margin-top: 6px;
+    font-family: var(--umprs-font);
+    font-size: 12px;
+    line-height: 1.4;
+    color: #646970;
+}
+
+#umprs-modal .ihc-register-notice {
+    margin-top: 6px;
+    font-family: var(--umprs-font);
+    font-size: 12px;
+    line-height: 1.4;
+    color: var(--umprs-error);
+}
+
+/* Botón de envío: igual que el del formulario de perfil del tema. */
+#umprs-modal .iump-submit-form {
+    margin-top: 12px;
+    text-align: right;
+}
+
+#umprs-modal .iump-submit-form .iump-register-row-left {
+    float: none;
+    width: auto;
+    margin: 0;
+}
+
+#umprs-modal .iump-submit-form input[type="submit"] {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    box-sizing: border-box;
+    margin: 0 !important;
+    padding: 14px 28px !important;
+    border: 0 !important;
+    border-radius: 8px !important;
+    background: var(--umprs-accent) !important;
+    color: var(--umprs-accent-ink) !important;
+    font-family: var(--umprs-font) !important;
+    font-size: 15px !important;
+    font-weight: 700 !important;
+    line-height: 1.2 !important;
+    text-align: center;
+    text-transform: none !important;
+    cursor: pointer;
+}
+
+#umprs-modal .iump-submit-form input[type="submit"]:hover,
+#umprs-modal .iump-submit-form input[type="submit"]:focus-visible {
+    background: var(--umprs-accent-soft) !important;
+    color: var(--umprs-accent) !important;
+}
+
+#umprs-modal .iump-submit-form input[type="submit"]:disabled {
+    opacity: .6;
+    cursor: wait;
+}
+
+/* Móvil: una columna. */
+@media (max-width: 599px) {
+    .umprs__panel {
+        padding: 20px 16px;
+    }
+
+    #umprs-modal #edituser {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #umprs-modal :is(.iump-form-checkbox-wrapper, .iump-form-radiobox-wrapper) {
+        grid-template-columns: minmax(0, 1fr);
+    }
+}
