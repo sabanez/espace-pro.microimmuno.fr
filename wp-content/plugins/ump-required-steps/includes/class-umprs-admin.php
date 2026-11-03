@@ -71,6 +71,21 @@ class UMPRS_Admin {
         $input = is_array($input) ? $input : array();
 
         foreach (UMPRS_Registry::get_steps() as $id => $step) {
+            // WordPress ejecuta este callback dos veces la primera vez que se guarda la opción (cuando aún no
+            // existe en la base de datos). La segunda recibe lo ya saneado, [paso => ['pages' => ...]], sin
+            // 'mode': antes se interpretaba como vacío y el ajuste se perdía. Aquí se acepta ese formato.
+            if (isset($input[$id]['pages']) && !isset($input[$id]['mode'])) {
+                $pages = $input[$id]['pages'];
+                if (is_string($pages) && in_array($pages, UMPRS_Pages::MODES, true)) {
+                    $out[$id] = array('pages' => $pages);
+                } elseif (is_array($pages)) {
+                    $ids = array_values(array_unique(array_filter(array_map('intval', $pages))));
+                    if (!empty($ids)) {
+                        $out[$id] = array('pages' => $ids);
+                    }
+                }
+                continue;
+            }
             $mode = isset($input[$id]['mode']) ? sanitize_key($input[$id]['mode']) : '';
             if (in_array($mode, UMPRS_Pages::MODES, true)) {
                 $out[$id] = array('pages' => $mode);

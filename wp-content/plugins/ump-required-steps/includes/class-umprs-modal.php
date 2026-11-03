@@ -118,6 +118,10 @@ class UMPRS_Modal {
      * @return bool
      */
     public static function is_allowed_page($step) {
+        // Nunca para visitantes sin sesión, sea cual sea el ajuste de páginas.
+        if (!is_user_logged_in()) {
+            return false;
+        }
         $target = UMPRS_Pages::resolve($step['pages']);
 
         if ($target['all']) {

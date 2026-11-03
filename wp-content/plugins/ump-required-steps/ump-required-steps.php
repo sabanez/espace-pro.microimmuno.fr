@@ -2,7 +2,7 @@
 /**
  * Plugin Name: UMP Required Steps
  * Description: Pasos obligatorios para los miembros de Ultimate Membership: tras el alta se muestra en el área privada una modal bloqueante con un formulario (campos de UMP) que reaparece en cada visita hasta que se completa.
- * Version: 1.4.7
+ * Version: 1.4.8
  * Text Domain: ump-required-steps
  * Requires PHP: 7.4
  */
@@ -13,7 +13,7 @@ if (!defined('ABSPATH')) {
 
 define('UMPRS_PATH', plugin_dir_path(__FILE__));
 define('UMPRS_URL', plugin_dir_url(__FILE__));
-define('UMPRS_VERSION', '1.4.7');
+define('UMPRS_VERSION', '1.4.8');
 
 require_once UMPRS_PATH . 'includes/class-umprs-pages.php';
 require_once UMPRS_PATH . 'includes/class-umprs-registry.php';

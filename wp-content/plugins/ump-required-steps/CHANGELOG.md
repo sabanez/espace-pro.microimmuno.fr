@@ -1,5 +1,11 @@
 # Changelog — UMP Required Steps
 
+## [1.4.8] — 2026-11-03
+
+### Corregido
+- **Ajustes → Required Steps no guardaba bien la página elegida (p. ej. "Todo el sitio"):** WordPress llama dos veces al saneado la primera vez que se guarda la opción, y la segunda llamada recibía el formato ya saneado, que se interpretaba como vacío y borraba el ajuste. El saneado ahora acepta ambos formatos.
+- La comprobación de sesión iniciada se aplica también en `is_allowed_page()`: la modal no se muestra nunca a visitantes sin login, con cualquier ajuste de páginas.
+
 ## [1.4.7] — 2026-10-28
 
 ### Corregido
