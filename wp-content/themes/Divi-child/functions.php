@@ -208,3 +208,23 @@ add_action('wp_footer', function () {
     </script>
     <?php
 }, 99);
+
+/**
+ * Permitir a los administradores editar la página de inscripción con Divi.
+ *
+ * UMP redirige a cualquier usuario con sesión iniciada que abra la página de
+ * registro (GeneralActions::user_logged_on_register_page, enganchada a
+ * 'ihc_action_general_init' con prioridad 999). Eso impide abrir el Visual
+ * Builder de Divi (?et_fb=1) con la cuenta de administrador.
+ *
+ * Si quien visita puede editar páginas Y está en el constructor/previsualización
+ * de Divi, se eliminan los callbacks de 'ihc_action_general_init' solo en esa
+ * petición (prioridad 1, antes de que corran). Los visitantes normales no se ven
+ * afectados y la redirección sigue funcionando para ellos.
+ */
+add_action('ihc_action_general_init', function () {
+    $in_divi_builder = isset($_GET['et_fb']) || isset($_GET['et_pb_preview']);
+    if ($in_divi_builder && is_user_logged_in() && current_user_can('edit_pages')) {
+        remove_all_actions('ihc_action_general_init');
+    }
+}, 1);

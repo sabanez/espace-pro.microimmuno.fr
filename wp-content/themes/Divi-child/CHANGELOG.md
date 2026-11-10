@@ -2,6 +2,16 @@
 
 Solo se documentan los cambios hechos a partir de esta fecha; el historial anterior del tema no está recogido aquí.
 
+## 2026-11-10
+
+### Añadido (`functions.php`)
+- **Bypass de la redirección de UMP para administradores en el Visual Builder de Divi.** UMP redirige a los usuarios con sesión iniciada que abren la página de registro (`/inscription/`), lo que impedía abrir el editor visual con la cuenta de admin.
+  - Se activa solo si la URL lleva `et_fb` o `et_pb_preview` Y el usuario tiene la capacidad `edit_pages`.
+  - En ese caso se quitan los callbacks de `ihc_action_general_init` (prioridad 1) solo para esa petición; también se omiten las restricciones de UMP de esa petición.
+  - Para visitantes normales nada cambia: siguen siendo redirigidos.
+  - Cómo probar: con sesión de admin, abrir `/inscription/?et_fb=1` (o el botón "Activar Visual Builder"); sin `et_fb`, la redirección sigue ocurriendo.
+  - No probado en el sitio real todavía.
+
 ## 2026-11-03
 
 ### Añadido (`functions.php`)
